@@ -16,7 +16,8 @@ class APP(tornado.web.Application):
     def __init__(self):
         handlers = [
             (r"/",HomeHandler),
-            (r"/category",CategoryHandler),
+            #(r"/category",CategoryHandler),
+            (r"/categoryxstart=(\d+)",CategoryHandler),
         ]
 
         settings = dict(
@@ -26,9 +27,6 @@ class APP(tornado.web.Application):
         )
 
         tornado.web.Application.__init__(self,handlers,**settings)
-        #connect to mogodb
-        client = MongoClient()
-        self.db = client['torrent']
 
 class BaseHandler(tornado.web.RequestHandler):
     @property
@@ -45,17 +43,26 @@ class HomeHandler(BaseHandler):
         )
 
 class CategoryHandler(BaseHandler):
-    def get(self):
-        btList = self.db.priate.find() 
-        xbtList = []
-        for i in btList:
-            xbtList.append(i)
-        ybtList = xbtList[:20]
+    #connect to mogodb
+    client = MongoClient()
+    db = client['torrent']
+    cursor_btList = db.priate.find() 
+    btList = []
+    for i in cursor_btList:
+        btList.append(i)
+    total = len(btList) 
+    def get(self,input):
+        curIndex = int(input)
+        itemsPerPage = 22 
+        ybtList = CategoryHandler.btList[(curIndex-1)*itemsPerPage:curIndex*itemsPerPage]
         self.render(
             "category.html",
-            title = "category header",
-            text = "hello caome",
+            title = "categoy header",
             btList = ybtList,
+            total = CategoryHandler.total, 
+            itemsPerPage = itemsPerPage, 
+            curIndex = curIndex,
+            input = input,
         )
 
 def main():
