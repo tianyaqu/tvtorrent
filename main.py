@@ -62,7 +62,6 @@ class CategoryHandler(BaseHandler):
             total = CategoryHandler.total, 
             itemsPerPage = itemsPerPage, 
             curIndex = curIndex,
-            input = input,
         )
 
 def main():
