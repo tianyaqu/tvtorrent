@@ -12,18 +12,19 @@ canvas-main
 
 .torrent-item
 {
-    max-width:650px;
+    width:650px;
 }
 
 .torrent-item-extra
 {
     float:none;
+    width:65px;
     margin-left:0;
 }
 .torrent-item-link
 {
     float:none;
-    max-width:15px;
+    width:5px;
     margin-left:0;
 }
 .site-footer {

@@ -17,30 +17,36 @@
         <thead>
             <tr>
                 <th>name</th>
-                <th><span class="glyphicon glyphicon-hdd"></span> size</th>
-                <th><span class="glyphicon glyphicon-time"></span> time</th>
-                <th><span class="glyphicon glyphicon-magnet"></span> link</th>
+                <th><span class="glyphicon glyphicon-hdd" ></span> size</th>
+                <th><span class="glyphicon glyphicon-time" ></span> time</th>
+                <th><span class="glyphicon glyphicon-magnet" ></span> link</th>
+                <th><span ></span></th>
             </tr>
         </thead>
         <tbody>
             {% for item in btList %}
             <tr>
-                <td class="torrent-item" style="word-break:break-all;">
+                <td ><div class="torrent-item" style="word-break:break-all;">
                 {{ item['name'] }}
+                </div>
                 </td>
-                <td class="torrent-item-extra">
+                <td ><div class="torrent-item-extra">
                 {{item['size'].replace(' ','')}}
+                </div>
                 </td>
-                <td class="torrent-item-extra">
+                <td ><div class="torrent-item-extra">
                 {{item['time'].replace(' ','')}}
+                </div>
                 </td>
-                <td class="torrent-item-link">
+                <td ><div class="torrent-item-link">
                 <a id ="sb" data-message="magnet" href="{{item['url']}}" data-toggle="tooltip" title="right click to copy the link">
                     <span class="glyphicon glyphicon-magnet"></span>
                 </a>
+                </div>
                 </td>
-                <td>
+                <td ><div class="torrent-item-link">
                 <a id = "sb" href="javascript:void(0)" data-toggle="tooltip" data-placement="left" title="举报该链接"><span class="glyphicon glyphicon-exclamation-sign"></span></a>
+                </div>
                 </td>
             </tr>
             {% end %}
