@@ -16,8 +16,8 @@ class APP(tornado.web.Application):
     def __init__(self):
         handlers = [
             (r"/",HomeHandler),
-            #(r"/category",CategoryHandler),
-            (r"/categoryxstart=(\d+)",CategoryHandler),
+            (r"/category",CategoryHandler),
+            #(r"/categoryxstart=(\d+)",CategoryHandler),
         ]
 
         settings = dict(
@@ -32,6 +32,9 @@ class BaseHandler(tornado.web.RequestHandler):
     @property
     def db(self):
         return self.application.db
+
+    def input(self,*args,**kwargs):
+        return self.get_argument(*args,**kwargs)
 
 
 class HomeHandler(BaseHandler):
@@ -51,8 +54,8 @@ class CategoryHandler(BaseHandler):
     for i in cursor_btList:
         btList.append(i)
     total = len(btList) 
-    def get(self,input):
-        curIndex = int(input)
+    def get(self):
+        curIndex = max(int(self.input('start',1)),1)
         itemsPerPage = 22 
         ybtList = CategoryHandler.btList[(curIndex-1)*itemsPerPage:curIndex*itemsPerPage]
         self.render(
