@@ -10,6 +10,9 @@ import tornado.options
 import tornado.web
 from tornado.options import define,options
 
+from handler.home import HomeHandler
+from handler.category import CategoryHandler
+
 define("port",default=8888,help="run on a given port",type=int)
 
 class APP(tornado.web.Application):
@@ -17,6 +20,8 @@ class APP(tornado.web.Application):
         handlers = [
             (r"/",HomeHandler),
             (r"/category",CategoryHandler),
+            (r"/search",CategoryHandler),
+            #(r"/search",SearchHandler),
             #(r"/categoryxstart=(\d+)",CategoryHandler),
         ]
 
@@ -36,34 +41,29 @@ class BaseHandler(tornado.web.RequestHandler):
     def input(self,*args,**kwargs):
         return self.get_argument(*args,**kwargs)
 
-
-class HomeHandler(BaseHandler):
+class SearchHandler(BaseHandler):
     def get(self):
-        self.render(
-            "home.html",
-            title = "TV torrent | Home",
-            text = "Welcome to TV torrent!",
-        )
-
-class CategoryHandler(BaseHandler):
-    #connect to mogodb
-    client = MongoClient()
-    db = client['torrent']
-    cursor_btList = db.priate.find() 
-    btList = []
-    for i in cursor_btList:
-        btList.append(i)
-    total = len(btList) 
-    def get(self):
-        curIndex = max(int(self.input('start',1)),1)
+        client = MongoClient()
+        db = client['torrent']
+        key = self.input('key','none')
+        pattern = re.compile(r'.*%s.*' %key,re.I)
+        cursor_btList = db.priate.find({'name':pattern}) 
+        btList = []
+        ybtList = []
+        for i in cursor_btList:
+            btList.append(i)
+        total = len(btList) 
         itemsPerPage = 22 
-        ybtList = CategoryHandler.btList[(curIndex-1)*itemsPerPage:curIndex*itemsPerPage]
+        curIndex = 1
+        ybtList = btList[0:curIndex*itemsPerPage]
+        print total
+        #print key
         self.render(
             "category.html",
-            title = "categoy header",
+            title = "Search Results",
             btList = ybtList,
-            total = CategoryHandler.total, 
-            itemsPerPage = itemsPerPage, 
+            total = total, 
+            itemsPerPage = 22, 
             curIndex = curIndex,
         )
 

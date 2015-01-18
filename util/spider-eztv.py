@@ -8,7 +8,7 @@ url = 'https://eztv.it/page_%d'
 find_re = re.compile(r'<tr name="hover" class="forum_header_border">.+?<td.+?/td>.+?thread_post".+?title="(.+?)\((.+?)\)".+?thread_post".+?<a href="(magnet:.+?)".+?thread_post">(.+?) ?</td>.+?</tr>', re.DOTALL)  
 
 # 20页资源  
-for i in range(0, 20):  
+for i in range(0, 10):  
     u = url % (i)  
     # fake user agent,eztv will deny a urllib agent
     request = urllib2.Request(u)
@@ -28,6 +28,6 @@ for i in range(0, 20):
         print 'time,\t',x[3]
         print '-------------------------------------'
         # 保存到数据库  
-        db.priate.save(values)  
+        db.apriate.save(values)  
   
 print 'Done!'  
