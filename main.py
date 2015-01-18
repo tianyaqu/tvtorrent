@@ -21,8 +21,6 @@ class APP(tornado.web.Application):
             (r"/",HomeHandler),
             (r"/category",CategoryHandler),
             (r"/search",CategoryHandler),
-            #(r"/search",SearchHandler),
-            #(r"/categoryxstart=(\d+)",CategoryHandler),
         ]
 
         settings = dict(
@@ -32,40 +30,6 @@ class APP(tornado.web.Application):
         )
 
         tornado.web.Application.__init__(self,handlers,**settings)
-
-class BaseHandler(tornado.web.RequestHandler):
-    @property
-    def db(self):
-        return self.application.db
-
-    def input(self,*args,**kwargs):
-        return self.get_argument(*args,**kwargs)
-
-class SearchHandler(BaseHandler):
-    def get(self):
-        client = MongoClient()
-        db = client['torrent']
-        key = self.input('key','none')
-        pattern = re.compile(r'.*%s.*' %key,re.I)
-        cursor_btList = db.priate.find({'name':pattern}) 
-        btList = []
-        ybtList = []
-        for i in cursor_btList:
-            btList.append(i)
-        total = len(btList) 
-        itemsPerPage = 22 
-        curIndex = 1
-        ybtList = btList[0:curIndex*itemsPerPage]
-        print total
-        #print key
-        self.render(
-            "category.html",
-            title = "Search Results",
-            btList = ybtList,
-            total = total, 
-            itemsPerPage = 22, 
-            curIndex = curIndex,
-        )
 
 def main():
     tornado.options.parse_command_line()
